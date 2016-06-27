@@ -1,22 +1,22 @@
-Thoughts on file controller
-==
+File Controller Conceptualization
+=================================
 
-* Should create a collection if one is not provided. Return collection UUID in response requesting PATCH (update).
-* Should require PCDM in ttl.
-* Should be universal
+* Should add files to filesets in an Object
+* IF no fileset container exists, create one and report
+* Be agnostic as to ontology, instead focus on `put` service for a binary and have `patch` available to accept addtl' fcr:metadata.
+* Should return something if successful else panic.
 
 
-Should accept (following Danny's PorkPie in some respect)
-==
+Should accept
+=============
 
 * put/post file/{object} - creates pcdm:Object and attaches any binaries as pcdm:File. Object here hasMember, hasRelatedObj.
-* patch file/{object} - append additional binaries?
-* delete file/{object} - delete.
+* patch file/{object} - append additional metadata.
+* get file/{id} - do something.
+* delete file/{object} - delete something.
 
 
 pcdmuse?
-==
+========
 
-* put preservationFile/{object} - adds a file with PCDM and RDF that sets it as PM.
-* put thumbnailFile/{object} - ' ' set as thumbnail.
-* etc.
+* Nope. This service doesn't give a hoot.
