@@ -140,14 +140,18 @@ class PDXServiceProvider implements ServiceProviderInterface, ControllerProvider
 
         # File Service Routes
         $controllers->get("/file", "islandora.filecontroller:get")
-            ->bind('islandora.fileGet');
-//        $controllers->post("/file/{id}", "islandora.filecontroller:create")
-//            ->value('id', "")
-//            ->bind('islandora.fileCreate');
-//        $controllers->post("/file/{id}/member/{member}", "islandora.filecontroller:addMember")
-//            ->bind('islandora.fileAddMember');
-//        $controllers->delete("/file/{id}/member/{member}", "islandora.file controller:removeMember")
-//            ->bind('islandora.collectionRemoveMember');
+            ->bind('islandora.fileGet'); // TESTING ONLY.
+
+        // This is all just placeholder routes - they're copied from our collection controller.
+        $controllers->post("/file/{id}", "islandora.filecontroller:create")
+            ->value('id', "")
+            ->bind('islandora.fileCreate');
+
+        $controllers->post("/file/{id}/member/{member}", "islandora.filecontroller:addMember")
+            ->bind('islandora.fileAddMember');
+
+        $controllers->delete("/file/{id}/member/{member}", "islandora.file controller:removeMember")
+            ->bind('islandora.collectionRemoveMember');
 
 
         return $controllers;

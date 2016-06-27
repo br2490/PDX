@@ -19,6 +19,10 @@ class FileController
         $this->uuidGenerator = $uuidGenerator;
     }
 
+    public function get(Application $app, Request $request) {
+        return "This is not the file you are looking for...";
+    }
+
     public function create(Application $app, Request $request, $id)
     {
         $tx = $request->query->get('tx', "");

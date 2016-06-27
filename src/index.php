@@ -37,20 +37,15 @@ $app->register(new \Moust\Silex\Provider\CacheServiceProvider(), array(
     ),
 ));
 
-
-$islandoraPDXServiceProvider = new PDXServiceProvider;
 $islandoraCrayfishProvider = new CrayfishProvider;
+$islandoraPDXServiceProvider = new PDXServiceProvider;
 
-$app->register(
-    $islandoraPDXServiceProvider,
-    array(
-        'UuidGenerator' => new UuidGenerator(),
-    )
-);
 $app->register($islandoraCrayfishProvider);
+$app->register($islandoraPDXServiceProvider);
 
-$app->mount("/islandora", $islandoraPDXServiceProvider);
 $app->mount("/islandora", $islandoraCrayfishProvider);
+$app->mount("/islandora", $islandoraPDXServiceProvider);
+
 
 /**
  * Convert returned Guzzle responses to Symfony responses, type hinted.
