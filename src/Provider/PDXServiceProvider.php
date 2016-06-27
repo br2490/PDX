@@ -1,6 +1,6 @@
 <?php
 
-namespace Islandora\PDX\CollectionService\Provider;
+namespace Islandora\PDX\Provider;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
@@ -13,8 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Yaml\Yaml;
 use Islandora\PDX\CollectionService\Controller\CollectionController;
+use Islandora\PDX\FileService\Controller\FileController;
 
-class CollectionServiceProvider implements ServiceProviderInterface, ControllerProviderInterface
+
+class PDXServiceProvider implements ServiceProviderInterface, ControllerProviderInterface
 {
     /**
    * Part of ServiceProviderInterface
@@ -27,7 +29,7 @@ class CollectionServiceProvider implements ServiceProviderInterface, ControllerP
         //This is the base path for the application. Used to change the location
         //of yaml config files when registerd somewhere else
         if (!isset($app['islandora.BasePath'])) {
-            $app['islandora.BasePath'] = __DIR__.'/..';
+            $app['islandora.BasePath'] = __DIR__ . '/src';
         }
     
         // If nobody registered a UuidGenerator first?
@@ -40,11 +42,21 @@ class CollectionServiceProvider implements ServiceProviderInterface, ControllerP
                 )
             );
         }
+
+        # Register Collection controller
         $app['islandora.collectioncontroller'] = $app->share(
             function () use ($app) {
                 return new CollectionController($app, $app['UuidGenerator']);
             }
         );
+
+        # Register File Service controller
+        $app['islandora.filecontroller'] = $app->share(
+            function () use ($app) {
+                return new FileController($app, $app['UuidGenerator']);
+            }
+        );
+
         if (!isset($app['twig'])) {
             $app['twig'] = $app->share(
                 $app->extend(
@@ -109,21 +121,32 @@ class CollectionServiceProvider implements ServiceProviderInterface, ControllerP
    */
     public function connect(Application $app)
     {
-        $CollectionControllers = $app['controllers_factory'];
-        //
-        // Define routing referring to controller services
-        //
+        $controllers = $app['controllers_factory'];
 
-        $CollectionControllers->post("/collection/{id}", "islandora.collectioncontroller:create")
+        # Collection Service Routes
+        $controllers->post("/collection/{id}", "islandora.collectioncontroller:create")
             ->value('id', "")
             ->bind('islandora.collectionCreate');
-        $CollectionControllers->post("/collection/{id}/member/{member}", "islandora.collectioncontroller:addMember")
+        $controllers->post("/collection/{id}/member/{member}", "islandora.collectioncontroller:addMember")
             ->bind('islandora.collectionAddMember');
-        $CollectionControllers->delete(
+        $controllers->delete(
             "/collection/{id}/member/{member}",
             "islandora.collectioncontroller:removeMember"
         )
             ->bind('islandora.collectionRemoveMember');
-        return $CollectionControllers;
+
+        # File Service Routes
+        $controllers->get("/file", "islandora.filecontroller:get")
+            ->bind('islandora.fileGet');
+//        $controllers->post("/file/{id}", "islandora.filecontroller:create")
+//            ->value('id', "")
+//            ->bind('islandora.fileCreate');
+//        $controllers->post("/file/{id}/member/{member}", "islandora.filecontroller:addMember")
+//            ->bind('islandora.fileAddMember');
+//        $controllers->delete("/file/{id}/member/{member}", "islandora.file controller:removeMember")
+//            ->bind('islandora.collectionRemoveMember');
+
+
+        return $controllers;
     }
 }

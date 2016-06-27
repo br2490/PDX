@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Psr\Http\Message\ResponseInterface;
 use Silex\Provider\TwigServiceProvider;
-use Islandora\PDX\CollectionService\Provider\CollectionServiceProvider;
+use Islandora\PDX\Provider\PDXServiceProvider;
 use Islandora\Crayfish\Provider\CrayfishProvider;
 
 date_default_timezone_set('UTC');
@@ -24,22 +24,22 @@ $app->register(new \Silex\Provider\ServiceControllerServiceProvider());
 // TODO: Not register all template directories right now.
 $app->register(new \Silex\Provider\TwigServiceProvider(), array(
   'twig.path' => array(
-    __DIR__ . 'CollectionService/templates',
+    __DIR__ . '/CollectionService/templates',
   ),
 ));
 
-$islandoraCollectionServiceProvider = new CollectionServiceProvider;
+$islandoraPDXServiceProvider = new PDXServiceProvider;
 $islandoraCrayfishProvider = new CrayfishProvider;
 
 $app->register(
-    $islandoraCollectionServiceProvider,
+    $islandoraPDXServiceProvider,
     array(
         'UuidGenerator' => new UuidGenerator(),
     )
 );
 $app->register($islandoraCrayfishProvider);
 
-$app->mount("/islandora", $islandoraCollectionServiceProvider);
+$app->mount("/islandora", $islandoraPDXServiceProvider);
 $app->mount("/islandora", $islandoraCrayfishProvider);
 
 /**

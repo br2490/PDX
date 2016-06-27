@@ -1,6 +1,6 @@
 <?php
 
-namespace Islandora\PDX\CollectionService\Controller;
+namespace Islandora\PDX\FileService\Controller;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,7 +9,7 @@ use Islandora\Chullo\Uuid\IUuidGenerator;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use ML\JsonLd\JsonLd;
 
-class FileServiceController
+class FileController
 {
 
     protected $uuidGenerator;
