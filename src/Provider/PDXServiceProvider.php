@@ -71,7 +71,7 @@ class PDXServiceProvider implements ServiceProviderInterface, ControllerProvider
             );
         } else {
             # Add our templates to the existing twig instance.
-            $app['twig.loader']->addLoader(new \Twig_Loader_Filesystem(__DIR__ . '/../templates'));
+            $app['twig.loader']->addLoader(new \Twig_Loader_Filesystem(__DIR__ . '/../CollectionService/templates'));
         }
         if (!isset($app['api'])) {
             $app['api'] =  $app->share(
